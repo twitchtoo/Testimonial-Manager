@@ -1,0 +1,3 @@
+
+In this version, no files are in /includes/functions
+remove any that you find from old installs

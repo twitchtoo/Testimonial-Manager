@@ -1,0 +1,3 @@
+
+In this version, no files are in admin/includes/init_includes
+remove any that you find from old installs

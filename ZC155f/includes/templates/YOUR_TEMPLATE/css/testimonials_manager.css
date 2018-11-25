@@ -1,0 +1,13 @@
+/*
+ * 
+ * @copyright Copyright 2018 davewest
+ * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
+ * @version $Id: Testimonials_Manager.php v2.0 11-14-2018 davewest $
+ */
+ 
+.redstar {color:rgba(239,41,41,1);}  
+.blackstar {color:rgba(239,41,41,0.4);}
+.coms_mid {color:rgba(0,0,0,0.9);font-size:14px;text-align:left;}
+.coms_text {font-size:14px;}
+.coms_text img {float:left;margin-right:10px;margin-bottom:5px;}
+section {clear:both;}
