@@ -366,7 +366,7 @@ $new_version_details = plugin_version_check_for_updates($zencart_com_plugin_id, 
           
           <tr>
             <td class="main"><?php echo 'Make Public:'; ?></td>
-            <td class="main"><?php echo zen_draw_radio_field('tm_make_public', 'yes', ($bInfo->tm_make_public == 1 ? true : false),'id="tm_make_public_left"') . '<label for="tm_make_public_left">Yes</label>&nbsp;&nbsp;' . zen_draw_radio_field('tm_make_public', 'no', ($bInfo->tm_make_public == 0 ? true : false), 'id="tm_make_public_right"') . '<label for="tm_make_public_right">No</label>&nbsp;&nbsp;&nbsp;&nbsp;' . TEXT_FIELD_REQUIRED; ?> </td>
+            <td class="main"><?php echo zen_draw_radio_field('tm_make_public', 'yes', ($bInfo->tm_make_public == 'yes' ? true : false),'id="tm_make_public_left"') . '<label for="tm_make_public_left">Yes</label>&nbsp;&nbsp;' . zen_draw_radio_field('tm_make_public', 'no', ($bInfo->tm_make_public == 'no' ? true : false), 'id="tm_make_public_right"') . '<label for="tm_make_public_right">No</label>&nbsp;&nbsp;&nbsp;&nbsp;' . TEXT_FIELD_REQUIRED; ?> </td>
           </tr>    
 		  <tr>
             <td class="main"><?php echo 'Privacy checked:'; ?></td>
@@ -457,7 +457,7 @@ $new_version_details = plugin_version_check_for_updates($zencart_com_plugin_id, 
               </tr>
                 
 <?php
-    $testimonials_query_raw = "select testimonials_id, language_id, testimonials_image, testimonials_title, testimonials_name, testimonials_mail, testimonials_html_text, tm_rating, tm_feedback, tm_contact_user, tm_contact_phone, tm_privacy_conditions, tm_gen_info, helpful_yes, helpful_no, status, date_added, last_update from " . TABLE_TESTIMONIALS_MANAGER . " order by date_added DESC, testimonials_title";
+    $testimonials_query_raw = "select testimonials_id, language_id, testimonials_image, testimonials_title, testimonials_name, testimonials_mail, testimonials_html_text, tm_rating, tm_feedback, tm_contact_user, tm_contact_phone, tm_privacy_conditions, tm_gen_info, helpful_yes, helpful_no, status, date_added, last_update, tm_make_public from " . TABLE_TESTIMONIALS_MANAGER . " order by date_added DESC, testimonials_title";
     $testimonials_split = new splitPageResults($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS, $testimonials_query_raw, $testimonials_query_numrows);
     $testimonials = $db->Execute($testimonials_query_raw);
 
@@ -535,11 +535,12 @@ $teststatus = 'Approved';
         $contents[] = array('text' => '<br />' . TEXT_INFO_TESTIMONIALS_STATUS . ' '  . $teststatus);
 
 		if (zen_not_null($bInfo->testimonials_image)) {
-        $contents[] = array('text' => '<br />' . zen_image(DIR_WS_CATALOG_IMAGES . $bInfo->testimonials_image, $bInfo->testimonials_title, TESTIMONIAL_IMAGE_WIDTH, TESTIMONIAL_IMAGE_HEIGHT) . '<br />' . $bInfo->testimonials_title);
+        $contents[] = array('text' => '<br />' . zen_image(DIR_WS_CATALOG_IMAGES . $bInfo->testimonials_image, $bInfo->testimonials_title, TESTIMONIAL_IMAGE_WIDTH, TESTIMONIAL_IMAGE_HEIGHT) . '<br /><br />' . $bInfo->testimonials_title);
 		} else {
 		$contents[] = array('text' => '<br />' . TEXT_IMAGE_NONEXISTENT);
 		}
         $contents[] = array('text' => '<br />' . TEXT_INFO_TESTIMONIALS_RATING . ' '  . $bInfo->tm_rating . ' Stars');
+        $contents[] = array('text' => '<br /><b>' . TEXT_INFO_TESTIMONIALS_PUBLIC  . ' '  . $bInfo->tm_make_public . '</b>');
         $contents[] = array('text' => '<br />' . TEXT_INFO_TESTIMONIALS_FEEDBACK . ' '  . $bInfo->tm_feedback);
         $contents[] = array('text' => '<br />' . TEXT_INFO_TESTIMONIALS_CONTACT_NAME . ' '  . $bInfo->testimonials_name);
         $contents[] = array('text' => '<br />' . TEXT_INFO_TESTIMONIALS_CONTACT_EMAIL . ' ' . $bInfo->testimonials_mail);

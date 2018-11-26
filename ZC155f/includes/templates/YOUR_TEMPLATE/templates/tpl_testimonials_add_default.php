@@ -6,7 +6,7 @@
  * @copyright 2007 Clyde Jones
   * @copyright Portions Copyright 2003-2007 Zen Cart Development Team
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: Testimonials_Manager.php v2.0 11-14-2018 davewest $
+ * @version $Id: tpl_testimonoals_add_default.php v2.0 11-14-2018 davewest $
  */
 ?>
 
@@ -166,10 +166,10 @@ require($define_page);
       <?php echo zen_draw_checkbox_field('mobile_device', 'yes', false, ' id="mobile_device" ') . '<label for="mobile_device" >Did you use a mobile device?</label>'; ?>
       <div class="reveal-if-active">
        <div for="mobile_device_name">Type of Mobile device!: </div>
-       <?php echo zen_draw_input_field('mobile_device_name', $mobile_device_name, ' id="mobile_device_name" class="resizeField" placeholder="iPhone x" title="Your mobile device type?" data-require-pair="mobile_device"'); ?>    
+       <?php echo zen_draw_input_field('mobile_device_name', $mobile_device_name, ' id="mobile_device_name" class="resizeField" placeholder="iPhone x" title="Your mobile device type?" data-require-pair="#mobile_device"'); ?>    
       <br />  
        <div for="papermap_qa">Screen size or display size? </div>
-       <?php echo zen_draw_input_field('screen_size', $screen_size, ' id="screen_size" class="resizeField" placeholder="1 x 3 inch" title="Screen size or display size" data-require-pair="mobile_device"'); ?>
+       <?php echo zen_draw_input_field('screen_size', $screen_size, ' id="screen_size" class="resizeField" placeholder="1 x 3 inch" title="Screen size or display size" data-require-pair="#mobile_device"'); ?>
       </div></div>      
       
       <p>Tell us about your experience. What did you like? What can we do better?</p>
@@ -264,13 +264,14 @@ require($define_page);
       <?php echo zen_draw_radio_field('make_public', 'yes', '', 'id="make_public_yes" checked ') . '<label for="make_public_yes" class="inputLabel">Yes</label> ' . zen_draw_radio_field('make_public', 'no', '', 'id="make_public_no"') . '<label for="make_public_no" class="inputLabel">No</label>'; ?>
       </div> 
 <br class="clearBoth" /> 
-<br />      
+<br />   
+<?php if (DISPLAY_ADD_IMAGE == 'on') { ?>   
   <p class="guidelines">If you have an image for your avatar or other image you can upload it here. You can also upload more then one file by uploading a ZIP file. All images scaned, inspected, sized, or edited as necessary before displayed.  We reserve the right to delete any image we find offensive to us or others.</p>
  <div class="box center">
 <input type="file" name="tm_file" id="tm_file" class="inputfile inputfile-4" data-multiple-caption="{count} files selected" />
 <label for="tm_file"><figure><svg xmlns="http://www.w3.org/2000/svg" width="10" height="8" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/></svg></figure> <span>Upload 1 File (Optional)</span></label>
 </div>
-         
+<?php } ?>         
     <div class="email-pot">
 <label for="email-us"></label>
 <?php echo zen_draw_input_field(SPAM_TEST_TEXT, '', ' id="email-us" title="do not fill in!" placeholder="do not fill in!" autocomplete="off"', 'email'); ?>

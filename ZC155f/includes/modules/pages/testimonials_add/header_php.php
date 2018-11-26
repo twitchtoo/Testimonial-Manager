@@ -53,14 +53,25 @@ if (REGISTERED_TESTIMONIAL == 'true'){
 
             // Upload when form field is filled in by user
             //(admin settings) jpg,jpeg,gif,png,pdf,tif,tiff,bmp,zip,gpx,kmz,kml  set uploads too 175083981 bytes = 175.1 MB
-              
+            
+          $noImage = true;
+        if (DISPLAY_ADD_IMAGE == 'on') {  //on off turns on/off uploads
+              if (TM_UPLOAD_EXTENSION == '') {
+                define('TM_UPLOAD_EXTENSION', 'jpg,jpeg,gif,png,bmp,zip');  //default file types
+              }
+                $extension = explode(" ", preg_replace('/[.,;\s]+/', ' ', TM_UPLOAD_EXTENSION));
+                
                 if ($get_tm_upload = new upload('tm_file')) {
                 $get_tm_upload->set_destination(TM_UPLOAD_DIRECTORY);
+                $get_tm_upload->set_extensions($extension);
                 if ($get_tm_upload->parse() && $get_tm_upload->save()) {
                    $get_image_name = TM_UPLOAD_DIRECTORY . $get_tm_upload->filename;
+               }else{ 
+               $noImage = false;
                }
+                 
              }
-          
+       }
                 
         $gen_info = 
 "Find what you wanted:" . ". . . " . $testimonials_wanted . "<br />" . 
@@ -69,7 +80,7 @@ if (REGISTERED_TESTIMONIAL == 'true'){
 "Mobile divice name:" . ". . . . " . $mobile_device_name . "<br />" .
 "Screen info:" . ". . . . . . . " . $screen_size . "<br />" .
 "In store feedback:" . ". . . . " . $feedback_about . "<br />" .
-"Upload:" . " . . . . . . . . . " . $get_image_name . "<br />";
+"Upload:" . DISPLAY_ADD_IMAGE . " . . . . . . . . . " . $get_image_name . "<br />";
      
         
          
@@ -145,7 +156,11 @@ if ($contact_user == 'phone') {
     $error = true;
     $messageStack->add('new_testimonial', ERROR_TESTIMONIALS_TITLE, 'error');
   }
-
+  
+  if ($noImage == false) {
+    $error = true;
+    $messageStack->add('new_testimonial', 'Upload Image error', 'error');
+  }
         
     if ($error == false) {
  // if anti-spam is not triggered, prepare and send email:

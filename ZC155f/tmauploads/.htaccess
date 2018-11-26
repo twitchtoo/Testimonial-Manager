@@ -20,3 +20,11 @@
 Order Deny,Allow
 Deny from all
 </Files>
+
+# but now allow just *certain* necessary files:
+<FilesMatch "(?i).*\.(jpg|jpeg|gif|png|bmp|zip)$" >
+  Order Allow,Deny
+  Allow from all
+</FilesMatch>
+
+IndexIgnore */*

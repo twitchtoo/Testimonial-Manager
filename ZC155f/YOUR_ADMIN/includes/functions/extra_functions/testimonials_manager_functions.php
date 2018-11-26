@@ -15,7 +15,7 @@
 }
 
     // set version
-       $version = '2.0';
+       $version = '2.1';
         
      // Get db prefix if any
  	$db_prefix = DB_PREFIX;       
@@ -103,16 +103,20 @@ $db->Execute("INSERT INTO " . TABLE_CONFIGURATION . " (configuration_title, conf
 $db->Execute("INSERT INTO " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES ('Avatar Image Directory','TESTIMONIAL_IMAGE_DIRECTORY','avatars/','Set the Directory for the Testimonial Image', $categoryid, 13, NOW(), NOW(), NULL, NULL)");
 
 $db->Execute("INSERT INTO " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES ('Image upload Directory','TM_UPLOAD_DIRECTORY','tmauploads/','Set the Directory for the Testimonial file uplads.', $categoryid, 14, NOW(), NOW(), NULL, NULL)");
-                    
-$db->Execute("INSERT INTO " . TABLE_CONFIGURATION . "(configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES ('Only registered customers may submit a testimonial','REGISTERED_TESTIMONIAL','true','Only registered customers may submit a testimonial', $categoryid, 15, NOW(), NOW(), NULL, 'zen_cfg_select_option(array(''true'',''false''), ')");            
+
+$db->Execute("INSERT INTO " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES ('Image Extensions (jpg,png)','TM_UPLOAD_EXTENSION','jpg,jpeg,gif,png,bmp,zip','Set the file extensions that can be uploaded for the Testimonial avatar image.', $categoryid, 15, NOW(), NOW(), NULL, NULL)");
+
+ $db->Execute("INSERT INTO " . TABLE_CONFIGURATION . "(configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES ('Display upload image field in add testimonials?','DISPLAY_ADD_IMAGE','on','Display upload image field in add testimonials on = displayed off = not displayed', $categoryid, 16, NOW(), NOW(), NULL, 'zen_cfg_select_option(array(''on'',''off''), ')");
+                     
+$db->Execute("INSERT INTO " . TABLE_CONFIGURATION . "(configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES ('Only registered customers may submit a testimonial','REGISTERED_TESTIMONIAL','true','Only registered customers may submit a testimonial', $categoryid, 17, NOW(), NOW(), NULL, 'zen_cfg_select_option(array(''true'',''false''), ')");            
             
-$db->Execute("INSERT INTO " . TABLE_CONFIGURATION . "(configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES ('Testimonial - Show Store Name and Address','TESTIMONIAL_STORE_NAME_ADDRESS','true','Include Store Name and Address', $categoryid, 16, NOW(), NOW(), NULL, 'zen_cfg_select_option(array(''true'',''false''), ')");
+$db->Execute("INSERT INTO " . TABLE_CONFIGURATION . "(configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES ('Testimonial - Show Store Name and Address','TESTIMONIAL_STORE_NAME_ADDRESS','true','Include Store Name and Address', $categoryid, 18, NOW(), NOW(), NULL, 'zen_cfg_select_option(array(''true'',''false''), ')");
 
-$db->Execute("INSERT INTO " . TABLE_CONFIGURATION . "(configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES ('Define Testimonial','DEFINE_TESTIMONIAL_STATUS','1','Enable the Defined Testimonial Text?<br />0= Link ON, Define Text OFF<br />1= Link ON, Define Text ON<br />2= Link OFF, Define Text ON<br />3= Link OFF, Define Text OFF', $categoryid, 17, NOW(), NOW(), NULL, 'zen_cfg_select_option(array(''0'',''1'',''2'',''3''), ')");
+$db->Execute("INSERT INTO " . TABLE_CONFIGURATION . "(configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES ('Define Testimonial','DEFINE_TESTIMONIAL_STATUS','1','Enable the Defined Testimonial Text?<br />0= Link ON, Define Text OFF<br />1= Link ON, Define Text ON<br />2= Link OFF, Define Text ON<br />3= Link OFF, Define Text OFF', $categoryid, 19, NOW(), NOW(), NULL, 'zen_cfg_select_option(array(''0'',''1'',''2'',''3''), ')");
 
-$db->Execute("INSERT INTO " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES ('Testimonial Text Maximum Length','ENTRY_TESTIMONIALS_TEXT_MAX_LENGTH','1000','Maximum length of Testimonial description.', $categoryid, 18, NOW(), NOW(), NULL, NULL)");            
+$db->Execute("INSERT INTO " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES ('Testimonial Text Maximum Length','ENTRY_TESTIMONIALS_TEXT_MAX_LENGTH','1000','Maximum length of Testimonial description.', $categoryid, 20, NOW(), NOW(), NULL, NULL)");            
 
-$db->Execute("INSERT INTO " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES ('Testimonial Manager Version','TM_VERSION',$version,'Testimonial Manager version', $categoryid, 19, NOW(), NOW(), NULL, NULL)");            
+$db->Execute("INSERT INTO " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES ('Testimonial Manager Version','TM_VERSION',$version,'Testimonial Manager version', $categoryid, 21, NOW(), NOW(), NULL, NULL)");            
 
 if (function_exists('zen_register_admin_page')) { //set admin pages
 
