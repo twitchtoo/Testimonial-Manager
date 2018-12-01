@@ -32,6 +32,7 @@ define('TABLE_HEADING_DATE_ADDED', 'Date Added:');
 
 define('TEXT_INFO_TESTIMONIALS_STATUS', 'Status:');
 define('TEXT_INFO_TESTIMONIALS_RATING', 'Store Rating:');
+define('TEXT_INFO_TESTIMONIALS_PUBLIC', 'Can we Display this one:');
 define('TEXT_INFO_TESTIMONIALS_FEEDBACK', 'Testimonial Feedback:');
 define('TEXT_INFO_TESTIMONIALS_CONTACT_NAME', 'Contact Name:');
 define('TEXT_INFO_TESTIMONIALS_CONTACT_EMAIL', 'Contact Email:');

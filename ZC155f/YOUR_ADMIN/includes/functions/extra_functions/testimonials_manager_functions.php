@@ -102,8 +102,6 @@ $db->Execute("INSERT INTO " . TABLE_CONFIGURATION . " (configuration_title, conf
             
 $db->Execute("INSERT INTO " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES ('Avatar Image Directory','TESTIMONIAL_IMAGE_DIRECTORY','avatars/','Set the Directory for the Testimonial Image', $categoryid, 13, NOW(), NOW(), NULL, NULL)");
 
-$db->Execute("INSERT INTO " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES ('Image upload Directory','TM_UPLOAD_DIRECTORY','tmauploads/','Set the Directory for the Testimonial file uplads.', $categoryid, 14, NOW(), NOW(), NULL, NULL)");
-
 $db->Execute("INSERT INTO " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES ('Image Extensions (jpg,png)','TM_UPLOAD_EXTENSION','jpg,jpeg,gif,png,bmp,zip','Set the file extensions that can be uploaded for the Testimonial avatar image.', $categoryid, 15, NOW(), NOW(), NULL, NULL)");
 
  $db->Execute("INSERT INTO " . TABLE_CONFIGURATION . "(configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES ('Display upload image field in add testimonials?','DISPLAY_ADD_IMAGE','on','Display upload image field in add testimonials on = displayed off = not displayed', $categoryid, 16, NOW(), NOW(), NULL, 'zen_cfg_select_option(array(''on'',''off''), ')");
@@ -182,4 +180,5 @@ global $db;
       return -1;
     }
   }
+  
 ?>

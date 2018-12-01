@@ -8,7 +8,7 @@
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
  * @version $Id: Author: DrByte  Sun Oct 18 23:02:01 2015 -0400 Modified in v1.5.5 $
- * @version $Id: Testimonials_Manager.php v2.0 11-14-2018 davewest $
+ * @version $Id: Testimonials_Manager.php v2.0 11-30-2018 davewest $
  */
 
 // This should be first line of the script:
@@ -35,7 +35,7 @@ if (REGISTERED_TESTIMONIAL == 'true'){
         $testimonials_mail = zen_db_prepare_input($_POST['testimonials_mail']); //email address
         $testimonials_title = zen_db_prepare_input(zen_sanitize_string($_POST['testimonials_title'])); //title default or user
         $testimonials_html_text = zen_db_prepare_input(strip_tags($_POST['testimonials_html_text'])); //message
-        $testimonials_avatar = TESTIMONIAL_IMAGE_DIRECTORY . 'cbgavatar.png'; //default avatar always
+        $testimonials_avatar = zen_db_prepare_input($_POST['avatar_register']);
         $make_public = zen_db_prepare_input($_POST['make_public']); //yes, no
         //footer lines
         $contact_user = zen_db_prepare_input($_POST['contact_3']);    //email, no, phone 
@@ -50,28 +50,12 @@ if (REGISTERED_TESTIMONIAL == 'true'){
         $screen_size = zen_db_prepare_input(zen_sanitize_string($_POST['screen_size']));
         $feedback_about = zen_db_prepare_input($_POST['feedback_about']); //Associate feedback, In-Store experience, Associate feedback
 
+//format image for storage/use
+$base_image = substr($testimonials_avatar, strrpos($testimonials_avatar, '/')); //remove images/ folder from name
+$testimonials_avatar = TESTIMONIAL_IMAGE_DIRECTORY . $base_image; //reformat with image base folder and name
 
-            // Upload when form field is filled in by user
-            //(admin settings) jpg,jpeg,gif,png,pdf,tif,tiff,bmp,zip,gpx,kmz,kml  set uploads too 175083981 bytes = 175.1 MB
-            
-          $noImage = true;
-        if (DISPLAY_ADD_IMAGE == 'on') {  //on off turns on/off uploads
-              if (TM_UPLOAD_EXTENSION == '') {
-                define('TM_UPLOAD_EXTENSION', 'jpg,jpeg,gif,png,bmp,zip');  //default file types
-              }
-                $extension = explode(" ", preg_replace('/[.,;\s]+/', ' ', TM_UPLOAD_EXTENSION));
-                
-                if ($get_tm_upload = new upload('tm_file')) {
-                $get_tm_upload->set_destination(TM_UPLOAD_DIRECTORY);
-                $get_tm_upload->set_extensions($extension);
-                if ($get_tm_upload->parse() && $get_tm_upload->save()) {
-                   $get_image_name = TM_UPLOAD_DIRECTORY . $get_tm_upload->filename;
-               }else{ 
-               $noImage = false;
-               }
-                 
-             }
-       }
+
+
                 
         $gen_info = 
 "Find what you wanted:" . ". . . " . $testimonials_wanted . "<br />" . 
@@ -79,8 +63,7 @@ if (REGISTERED_TESTIMONIAL == 'true'){
 "Mobile divice used:" . ". . . . " . $mobile_device . "<br />" .
 "Mobile divice name:" . ". . . . " . $mobile_device_name . "<br />" .
 "Screen info:" . ". . . . . . . " . $screen_size . "<br />" .
-"In store feedback:" . ". . . . " . $feedback_about . "<br />" .
-"Upload:" . DISPLAY_ADD_IMAGE . " . . . . . . . . . " . $get_image_name . "<br />";
+"In store feedback:" . ". . . . " . $feedback_about;
      
         
          
@@ -157,10 +140,7 @@ if ($contact_user == 'phone') {
     $messageStack->add('new_testimonial', ERROR_TESTIMONIALS_TITLE, 'error');
   }
   
-  if ($noImage == false) {
-    $error = true;
-    $messageStack->add('new_testimonial', 'Upload Image error', 'error');
-  }
+
         
     if ($error == false) {
  // if anti-spam is not triggered, prepare and send email:
@@ -242,7 +222,20 @@ if ($_SESSION['customer_id']) {
 
 }
 
+//images/avatars/at_1.png
+//get all avatars with at_ .png ONLY 
+//any avatars not name as above is not used
+//randaum selection of 7 to display.
+$dir = 'images/' . TESTIMONIAL_IMAGE_DIRECTORY;  
+$at_avatars = '';
+$loop = GLOB($dir. '{at_}*{jpg,png}', GLOB_BRACE); // look for only jpg and png *{.jpg, .png}
+
+$catchme = array_rand($loop, 7);
+
+ $at_avatars .= '<img src="' . $loop[$catchme[0]] . '"><img src="' . $loop[$catchme[1]] . '"><img src="' . $loop[$catchme[2]] . '"><img src="' . $loop[$catchme[3]] . '"><img src="' . $loop[$catchme[4]] . '"><img src="' . $loop[$catchme[5]] . '"><img src="' . $loop[$catchme[6]] . '"> ';
+
   // include template specific file name defines
+
 $define_page = zen_get_file_directory(DIR_WS_LANGUAGES . $_SESSION['language'] . '/html_includes/', FILENAME_DEFINE_TESTIMONIALS_ADD, 'false');
 
     $breadcrumb->add(NAVBAR_TITLE);

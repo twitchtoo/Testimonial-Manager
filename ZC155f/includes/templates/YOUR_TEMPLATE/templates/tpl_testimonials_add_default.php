@@ -6,7 +6,7 @@
  * @copyright 2007 Clyde Jones
   * @copyright Portions Copyright 2003-2007 Zen Cart Development Team
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: tpl_testimonoals_add_default.php v2.0 11-14-2018 davewest $
+ * @version $Id: tpl_testimonoals_add_default.php v2.0 11-30-2018 davewest $
  */
 ?>
 
@@ -266,10 +266,27 @@ require($define_page);
 <br class="clearBoth" /> 
 <br />   
 <?php if (DISPLAY_ADD_IMAGE == 'on') { ?>   
-  <p class="guidelines">If you have an image for your avatar or other image you can upload it here. You can also upload more then one file by uploading a ZIP file. All images scaned, inspected, sized, or edited as necessary before displayed.  We reserve the right to delete any image we find offensive to us or others.</p>
- <div class="box center">
-<input type="file" name="tm_file" id="tm_file" class="inputfile inputfile-4" data-multiple-caption="{count} files selected" />
-<label for="tm_file"><figure><svg xmlns="http://www.w3.org/2000/svg" width="10" height="8" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/></svg></figure> <span>Upload 1 File (Optional)</span></label>
+  <p class="guidelines">We have a number of Avatars you can pick from. Avatars are not assign to any one user and are selected randumly from 15 of our best ones.</p>
+ <div class="avatars">
+
+  <div>Click to pick a avatar</div><br/>
+<div class="avatarList">
+<div class="mainImg"><img src="images/avatars/user-male-icon.png"></div>
+
+<div id="divCircle">
+     <div id="middleBubble"></div>
+
+
+     <?php 
+    echo $at_avatars;
+     ?>
+          
+</div>
+  
+</div>
+
+ <input type="hidden" name="avatar_register" value="images/avatars/user-male-icon.png" id="gadget_url">
+
 </div>
 <?php } ?>         
     <div class="email-pot">
@@ -320,7 +337,46 @@ require($define_page);
 </div>
 
 <script >
+$(document).ready(function () {
+	//Center the "info" bubble in the  "circle" div
+	var divTop = ($("#divCircle").height() - $("#middleBubble").height()) / 2;
+	var divLeft = ($("#divCircle").width() - $("#middleBubble").width()) / 2;
+	$("#middleBubble").css("top", divTop + "px");
+	$("#middleBubble").css("left", divLeft + "px");
 
+	//Arrange the icons in a circle centered in the div
+	numItems = $("#divCircle img").length; //How many items are in the circle?
+	start = 0.0; //the angle to put the first image at. a number between 0 and 2pi
+	step = 4 * Math.PI / numItems; //calculate the amount of space to put between the items.
+
+	//Now loop through the buttons and position them in a circle
+	$("#divCircle img").each(function (index) {
+		radius = ($("#divCircle").width() - $(this).width()) / 2.3; //The radius is the distance from the center of the div to the middle of an icon
+		//the following lines are a standard formula for calculating points on a circle. x = cx + r * cos(a); y = cy + r * sin(a)
+		//We have made adjustments because the center of the circle is not at (0,0), but rather the top/left coordinates for the center of the div
+		//We also adjust for the fact that we need to know the coordinates for the top-left corner of the image, not for the center of the image.
+		tmpTop = $("#divCircle").height() / 2 + radius * Math.sin(start) - $(this).height() / 2;
+		tmpLeft = $("#divCircle").width() / 2 + radius * Math.cos(start) - $(this).width() / 2;
+		start += step; //add the "step" number of radians to jump to the next icon
+
+		//set the top/left settings for the image
+		$(this).css("top", tmpTop);
+		$(this).css("left", tmpLeft);
+	});
+
+});
+
+$('.avatarList').click(function () {
+	$(this).toggleClass('expand');
+	$('#divCircle').toggleClass('expand');
+});
+
+$('#divCircle img').click(function () {
+	var theSrc = $(this).attr('src');
+	// alert(theSrc);
+	$('.mainImg img').attr('src', theSrc);
+	$("#gadget_url").val(theSrc);
+});
         
 var FormStuff = {
 

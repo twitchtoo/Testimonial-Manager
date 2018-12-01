@@ -2,10 +2,12 @@
 /**
  * Testimonials Manager
  *
- * @package Template System
+ * @package admin
  * @copyright 2007 Clyde Jones
-  * @copyright Portions Copyright 2003-2007 Zen Cart Development Team
+ * @copyright Copyright 2003-2016 Zen Cart Development Team
+ * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
+ * @version GIT: $Id: Author: Ian Wilson  Modified in v1.6.0 $
  * @version $Id: Testimonials_Manager.php v2.0 11-30-2018 davewest $
  */
 
@@ -101,28 +103,39 @@
             $messageStack->add_session(SUCCESS_PAGE_UPDATED, 'success');
           }
  
-  
-       if ($_POST['avatar_image'] != '') {
-        // add image manually
-        $existing_avatar = TESTIMONIAL_IMAGE_DIRECTORY . $_POST['avatar_image'];
-        $db->Execute("update " . TABLE_TESTIMONIALS_MANAGER . "
-                            set testimonials_image = '" . $existing_avatar . "'
-                            where testimonials_id = '" . (int)$testimonials_id . "'");
-      } else {
-        if ($testimonials_image = new upload('testimonials_image')) {
-          $testimonials_image->set_extensions(array('jpg','gif','png'));
+ 
+ 
+ if ($testimonials_image = new upload('testimonials_image')) {
           $testimonials_image->set_destination(DIR_FS_CATALOG_IMAGES . TESTIMONIAL_IMAGE_DIRECTORY);
           if ($testimonials_image->parse() && $testimonials_image->save()) {
-            $testimonials_image_name = zen_db_input(TESTIMONIAL_IMAGE_DIRECTORY . $testimonials_image->filename);
+            $testimonials_image_name = TESTIMONIAL_IMAGE_DIRECTORY . $testimonials_image->filename;
           }
           if ($testimonials_image->filename != 'none' && $testimonials_image->filename != '') {
-            // save filename when not set to none and not blank
             $db->Execute("update " . TABLE_TESTIMONIALS_MANAGER . "
-                            set testimonials_image = '" . $testimonials_image_name . "'
+                          set testimonials_image = '" . $testimonials_image_name . "'
                           where testimonials_id = '" . (int)$testimonials_id . "'");
-          } 
-        }
-      }
+          } else {
+		 
+			if ($_POST['avatar_image'] != '') {
+              $existing_avatar = TESTIMONIAL_IMAGE_DIRECTORY . $_POST['avatar_image'];
+              $db->Execute("update " . TABLE_TESTIMONIALS_MANAGER . "
+                            set testimonials_image = '" . $existing_avatar . "'
+                            where testimonials_id = '" . (int)$testimonials_id . "'");
+            } else {
+            
+			if ($testimonials_image->filename != '' or $_POST['image_delete'] == 1) {
+			$defavatar = (TESTIMONIAL_IMAGE_DIRECTORY . 'noAvatar.png');
+              $db->Execute("update " . TABLE_TESTIMONIALS_MANAGER . "
+                            set testimonials_image = '" . $defavatar . "'
+                            where testimonials_id = '" . (int)$testimonials_id . "'");
+            }
+		}
+         
+		  }
+		}
+ 
+ 
+ 
  
           zen_redirect(zen_href_link(FILENAME_TESTIMONIALS_MANAGER, (isset($_GET['page']) ? 'page=' . $_GET['page'] . '&' : '') . 'bID=' . $testimonials_id));
         } else {
@@ -137,30 +150,12 @@
         break;
     }
   } 
-?>
-<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html <?php echo HTML_PARAMS; ?>>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo CHARSET; ?>">
-<title><?php echo TITLE; ?></title>
-<link rel="stylesheet" type="text/css" href="includes/stylesheet.css">
-<link rel="stylesheet" type="text/css" href="includes/cssjsmenuhover.css" media="all" id="hoverJS">
-<script type="text/javascript" src="includes/menu.js"></script>
-<script type="text/javascript" src="includes/general.js"></script>
-<script type="text/javascript">
-  <!--
-  function init()
-  {
-    cssjsmenu('navbar');
-    if (document.getElementById)
-    {
-      var kill = document.getElementById('hoverJS');
-      kill.disabled = true;
-    }
-  if (typeof _editor_url == "string") HTMLArea.replaceAll();
-  }
-  // -->
-</script>
+
+
+ require('includes/admin_html_head.php'); 
+ 
+ ?>
+
 </head>
 <body onLoad="init()">
 <?php require(DIR_WS_INCLUDES . 'header.php'); ?>
@@ -398,7 +393,11 @@ $new_version_details = plugin_version_check_for_updates($zencart_com_plugin_id, 
                 <td class="main"><?php echo zen_draw_separator('pixel_trans.gif', '24', '15'); ?></td>
                 <td colspan="3" class="main" valign="top"><?php echo TEXT_PRODUCTS_IMAGE_MANUAL . '&nbsp;' . zen_draw_input_field('avatar_image'); ?></td>
               </tr>
-
+						  
+		  <tr>
+			<td class="main"><?php echo TEXT_IMAGES_TESTIMONIALS_DELETE; ?></td>
+            <td class="main"><?php echo zen_draw_radio_field('image_delete', '0', 'checked="checked"', $off_image_delete) . '&nbsp;' . TABLE_HEADING_NO . ' ' . zen_draw_radio_field('image_delete', '1', $on_image_delete) . '&nbsp;' . TABLE_HEADING_YES; ?></td>
+			</tr>
       <tr>
         <td><?php echo zen_draw_separator('pixel_trans.gif', '1', '10'); ?></td>
       </tr>
