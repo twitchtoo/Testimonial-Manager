@@ -11,3 +11,6 @@
 .coms_text {font-size:14px;}
 .coms_text img {float:left;margin-right:10px;margin-bottom:5px;}
 section {clear:both;}
+.upimage {float:right;}
+.coms_extra {display:table-cell; vertical-align:middle"}
+.dateline {line-height:2;}

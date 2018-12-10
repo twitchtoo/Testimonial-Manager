@@ -60,6 +60,7 @@ if (!$sniffer->field_exists($table_name,'tm_privacy_conditions')) $db->Execute("
 if (!$sniffer->field_exists($table_name,'helpful_yes')) $db->Execute("ALTER TABLE " . $table_name . " ADD COLUMN helpful_yes INT(12) NOT NULL");
 if (!$sniffer->field_exists($table_name,'helpful_no')) $db->Execute("ALTER TABLE " . $table_name . " ADD COLUMN helpful_no INT(12) NOT NULL");
 if (!$sniffer->field_exists($table_name,'tm_make_public')) $db->Execute("ALTER TABLE " . $table_name . " ADD COLUMN tm_make_public VARCHAR(20) NULL default NULL");
+if (!$sniffer->field_exists($table_name,'testimonials_upimg')) $db->Execute("ALTER TABLE " . $table_name . " ADD COLUMN testimonials_upimg VARCHAR(255) NOT NULL");
 
 //change column for security reasons
 if ($sniffer->field_exists($table_name,'testimonials_title')) $db->Execute("ALTER TABLE " . $table_name . " CHANGE testimonials_title testimonials_title VARCHAR(255) NOT NULL DEFAULT ''");
@@ -102,9 +103,9 @@ $db->Execute("INSERT INTO " . TABLE_CONFIGURATION . " (configuration_title, conf
             
 $db->Execute("INSERT INTO " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES ('Avatar Image Directory','TESTIMONIAL_IMAGE_DIRECTORY','avatars/','Set the Directory for the Testimonial Image', $categoryid, 13, NOW(), NOW(), NULL, NULL)");
 
-$db->Execute("INSERT INTO " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES ('Image Extensions (jpg,png)','TM_UPLOAD_EXTENSION','jpg,jpeg,gif,png,bmp,zip','Set the file extensions that can be uploaded for the Testimonial avatar image.', $categoryid, 15, NOW(), NOW(), NULL, NULL)");
+$db->Execute("INSERT INTO " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES ('Image upload Directory','TM_UPLOAD_DIRECTORY','uploads/','Set the Directory for the Testimonial file uplads.', $categoryid, 14, NOW(), NOW(), NULL, NULL)");
 
- $db->Execute("INSERT INTO " . TABLE_CONFIGURATION . "(configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES ('Display upload image field in add testimonials?','DISPLAY_ADD_IMAGE','on','Display upload image field in add testimonials on = displayed off = not displayed', $categoryid, 16, NOW(), NOW(), NULL, 'zen_cfg_select_option(array(''on'',''off''), ')");
+$db->Execute("INSERT INTO " . TABLE_CONFIGURATION . "(configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES ('Display upload image field in add testimonials?','DISPLAY_ADD_IMAGE','on','Display upload image field in add testimonials on = displayed off = not displayed', $categoryid, 16, NOW(), NOW(), NULL, 'zen_cfg_select_option(array(''on'',''off''), ')");
                      
 $db->Execute("INSERT INTO " . TABLE_CONFIGURATION . "(configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES ('Only registered customers may submit a testimonial','REGISTERED_TESTIMONIAL','true','Only registered customers may submit a testimonial', $categoryid, 17, NOW(), NOW(), NULL, 'zen_cfg_select_option(array(''true'',''false''), ')");            
             
@@ -141,6 +142,7 @@ if (function_exists('zen_register_admin_page')) { //set admin pages
       		testimonials_name VARCHAR(255) NOT NULL DEFAULT '',   
       		testimonials_html_text TEXT NOT NULL,  
       		testimonials_mail VARCHAR(96) NOT NULL DEFAULT '',
+      		testimonials_upimg VARCHAR(255) NOT NULL,
       		testimonials_image VARCHAR(255) NOT NULL DEFAULT '',
       		tm_rating INT(1) NOT NULL DEFAULT 0, 
       		tm_feedback VARCHAR(255) NULL default NULL,
@@ -180,5 +182,4 @@ global $db;
       return -1;
     }
   }
-  
 ?>

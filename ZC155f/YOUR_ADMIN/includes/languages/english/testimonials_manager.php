@@ -64,7 +64,10 @@ define('IMAGE_NEW_PAGE', 'New Testimonials Item');
 define('TEXT_INFO_PAGE_IMAGE', 'Testimonial Image:');
 define('TEXT_INFO_CURRENT_IMAGE', 'Current Image:');
 define('TEXT_IMAGES_TESTIMONIALS_DELETE', '<strong>Use \'No Avatar\' image!</strong>');
-define('TEXT_INFO_DELETE_IMAGE', '<strong>Please Delete the image yourself!</strong>');
+define('TEXT_INFO_DELETE_IMAGE', '<strong>Please Delete the Avatar image yourself!</strong>');
+define('TEXT_AVATAR_IMAGE_MANUAL', 'Or, select an existing Avatar image file from server, filename:');
+define('TEXT_AVATAR_PAGE_IMAGE', 'Testimonial Avatar:');
+define('TEXT_AVATAR_CURRENT_IMAGE', 'Current Avatar:');
 
 define('TEXT_REMOVE_WARRING', '<b> Warring: </b> this will remove only the menus and configuration settings!<br /> You must delete all files yourself!');
 define('TEXT_UPDATE_WARRING', '<b> Warring: </b> this will check for updated Testimonials Manager from Zen Cart Plugin\'s. If one exists, you will still need to download and follow the install/upgrade instructions!');

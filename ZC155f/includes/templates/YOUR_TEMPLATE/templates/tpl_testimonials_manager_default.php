@@ -21,11 +21,15 @@
 
 <fieldset class="coms_mid" style="width:90%;margin:1.2em;">
 
-<h3><?php echo $page_check->fields['testimonials_title']; ?></h3>
-<?php echo ($page_check->fields['tm_feedback'] != '') ? '<b>' . $page_check->fields['tm_feedback'] . '</b><br /><br />' : ''; ?>
+<h3><?php echo 'Customer Review'; ?></h3>
 
+<div style="border:2px solid rgba(0,0,0,0);">
+<div style="float:left;margin:1em;"><?php echo zen_image(DIR_WS_IMAGES . $page_check->fields['testimonials_image'], $page_check->fields['testimonials_title'], TESTIMONIAL_IMAGE_WIDTH, TESTIMONIAL_IMAGE_HEIGHT); // display avatar ?></div>
+<div style="margin-top:2em;"><b >by: <?php echo $page_check->fields['testimonials_name']; ?></b></div>
+</div>
 
-<div class="buttonRow ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br class="clearBoth" />
+<div class="">
 <?php 
  $star1 = '';
   for ($s=1; $s<=$page_check->fields['tm_rating']; $s++) {
@@ -36,19 +40,22 @@
   $star2 .= '<i class="blackstar fa fa-star fa-2x"></i>';
 }
   echo $star1 . $star2; 
-?>
-<?php if (DISPLAY_TESTIMONIALS_DATE_PUBLISHED == 'true') { echo '<span class="forward">' . zen_date_long($date_published) . '</span>'; } ?>
+  echo ($page_check->fields['tm_feedback'] != '') ? '&nbsp;&nbsp;&nbsp;<b>' . $page_check->fields['testimonials_title'] . ', ' . $page_check->fields['tm_feedback'] . '</b>' : ''; ?>
 </div>
+
+<?php if (DISPLAY_TESTIMONIALS_DATE_PUBLISHED == 'true') { echo '<p>' . zen_date_long($date_published) . '</p>'; } ?>
+
 <section class="coms_text">
-<?php
-   if (($page_check->fields['testimonials_image']) != ('')) {
-     echo zen_image(DIR_WS_IMAGES . $page_check->fields['testimonials_image'], $page_check->fields['testimonials_title'], TESTIMONIAL_IMAGE_WIDTH, TESTIMONIAL_IMAGE_HEIGHT);
+<p><?php if (($page_check->fields['testimonials_upimg']) != ('')) { 
+  if (function_exists('zen_colorbox') && ZEN_COLORBOX_STATUS == 'true') {
+echo '<a href="' . DIR_WS_IMAGES . $page_check->fields['testimonials_upimg'] . '" rel="tm-1" class="nofollow cboxElement" title="' . addslashes($page_check->fields['testimonials_title']) . '">' . zen_image(DIR_WS_IMAGES . $page_check->fields['testimonials_upimg'], $page_check->fields['testimonials_title'], 100) . '</a>';
+}else{
+echo '<a href="javascript:popupWindow(\'' . DIR_WS_IMAGES . $page_check->fields['testimonials_upimg'] . '\')">' . zen_image(DIR_WS_IMAGES . $page_check->fields['testimonials_upimg'], $page_check->fields['testimonials_title'], 100) . '</a>';
  }
-?>
-<p"><?php echo nl2br(zen_output_string_protected(stripslashes($page_check->fields['testimonials_html_text']))); ?></p>
+}  
+echo nl2br(zen_output_string_protected(stripslashes($page_check->fields['testimonials_html_text']))); //feedback ?></p>
 </section>
 <br class="clearBoth" />
-<div class="coms_extra back"><b><?php echo TESTIMONIALS_BY; ?> <?php echo $page_check->fields['testimonials_name']; ?></b></div>
 
 <div class="forward"><b>Was this site feecback helpful to you? </b> &nbsp;&nbsp;
 <?php echo '<a href="' . zen_href_link(FILENAME_TESTIMONIALS_MANAGER, 'action=helpyes&testimonials_id=' . $page_check->fields['testimonials_id'], $request_type) . '"> <span class="btnreview">' . BUTTON_YES_ALT . '</span></a>&nbsp;' . (string)$page_check->fields['helpful_yes'] . '&nbsp;<a href="' . zen_href_link(FILENAME_TESTIMONIALS_MANAGER, 'action=helpno&testimonials_id=' . $page_check->fields['testimonials_id'], $request_type) . '"><span class="btnreview">' . BUTTON_NO_ALT . '</span></a>&nbsp;' . (string)$page_check->fields['helpful_no'] . '&nbsp;&nbsp;' ; ?>

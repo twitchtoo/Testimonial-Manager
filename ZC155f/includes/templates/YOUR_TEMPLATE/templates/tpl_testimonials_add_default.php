@@ -19,11 +19,13 @@
 /** display shop total reviews */
  include($template->get_template_dir('/tpl_shop_total_reviews_default.php',DIR_WS_TEMPLATE, $current_page_base,'templates'). '/tpl_shop_total_reviews_default.php'); ?>
 </div>
+<br class="clearBoth" />
 
 <?php echo zen_draw_form('new_testimonial', zen_href_link(FILENAME_TESTIMONIALS_ADD, 'action=send', $request_type),'post','enctype="multipart/form-data" '); ?>
 
 <?php if (TESTIMONIAL_STORE_NAME_ADDRESS == 'true') { ?>
 <address><?php echo nl2br(STORE_NAME_ADDRESS); ?></address>
+<br class="clearBoth" />
 <?php } ?>
 
 <?php
@@ -265,7 +267,7 @@ require($define_page);
       </div> 
 <br class="clearBoth" /> 
 <br />   
-<?php if (DISPLAY_ADD_IMAGE == 'on') { ?>   
+   
   <p class="guidelines">We have a number of Avatars you can pick from. Avatars are not assign to any one user and are selected randumly from 15 of our best ones.</p>
  <div class="avatars">
 
@@ -288,7 +290,78 @@ require($define_page);
  <input type="hidden" name="avatar_register" value="images/avatars/user-male-icon.png" id="gadget_url">
 
 </div>
-<?php } ?>         
+<br class="clearBoth" /> 
+<?php if (DISPLAY_ADD_IMAGE == 'on') { ?>
+
+<div class="box" id="clear-box">
+<p class="guidelines">Include one image with your feedback. Only in jpg or png format. </p>
+<input type="file" name="file" id="inp_file" class="upfile upfile-1" />
+<label for="inp_file"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/></svg> <span class="btn-file">Choose a image</span></label>
+ 
+<div class="box-preview">
+<img class="north" id="upload-Preview" />
+    
+  <input id="inp_img" name="tm_img" type="hidden" value="">
+ </div>
+</div>
+<br />
+<div class="buttonRow center"><?php echo zen_image_button(BUTTON_IMAGE_DELETE, BUTTON_DELETE_ALT, ' id="file-reset" '); ?></div> 
+<script>
+ 
+  function fileChange(e) { 
+     document.getElementById('inp_img').value = '';
+     
+     var file = e.target.files[0];
+ 
+     if (file.type == "image/jpeg" || file.type == "image/png") {
+ 
+        var reader = new FileReader();  
+        reader.onload = function(readerEvent) {
+   
+           var image = new Image();
+           image.onload = function(imageEvent) {    
+              var max_size = 600;
+              var w = image.width;
+              var h = image.height;
+             
+              if (w > h) {  if (w > max_size) { h*=max_size/w; w=max_size; }
+              } else     {  if (h > max_size) { w*=max_size/h; h=max_size; } }
+             
+              var canvas = document.createElement('canvas');
+              canvas.width = w;
+              canvas.height = h;
+              canvas.getContext('2d').drawImage(image, 0, 0, w, h);
+                 
+              if (file.type == "image/jpeg") {
+                 var dataURL = canvas.toDataURL("image/jpeg", 1.0);
+              } else {
+                 var dataURL = canvas.toDataURL("image/png");   
+              }
+              document.getElementById('inp_img').value = dataURL;   
+              document.getElementById("upload-Preview").src = canvas.toDataURL();
+           }
+           image.src = readerEvent.target.result;
+        }
+        reader.readAsDataURL(file);
+     } else {
+        document.getElementById('inp_file').value = ''; 
+        alert('Please only select images in JPG- or PNG-format.');  
+     }
+  }
+ 
+  document.getElementById('inp_file').addEventListener('change', fileChange, false);    
+  
+ $('#file-reset').on('click', function(e){
+   var $el = $('#clear-box');
+   document.getElementById("upload-Preview").src = '';
+   $el.wrap('<form>').closest('form').get(0).reset();
+   $el.unwrap();
+});
+        
+</script>
+<br class="clearBoth" />
+<?php } ?>    
+<br class="clearBoth" />     
     <div class="email-pot">
 <label for="email-us"></label>
 <?php echo zen_draw_input_field(SPAM_TEST_TEXT, '', ' id="email-us" title="do not fill in!" placeholder="do not fill in!" autocomplete="off"', 'email'); ?>

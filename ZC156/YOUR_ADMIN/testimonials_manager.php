@@ -103,40 +103,51 @@
             $messageStack->add_session(SUCCESS_PAGE_UPDATED, 'success');
           }
  
- 
- 
- if ($testimonials_image = new upload('testimonials_image')) {
-          $testimonials_image->set_destination(DIR_FS_CATALOG_IMAGES . TESTIMONIAL_IMAGE_DIRECTORY);
-          if ($testimonials_image->parse() && $testimonials_image->save()) {
-            $testimonials_image_name = TESTIMONIAL_IMAGE_DIRECTORY . $testimonials_image->filename;
-          }
-          if ($testimonials_image->filename != 'none' && $testimonials_image->filename != '') {
-            $db->Execute("update " . TABLE_TESTIMONIALS_MANAGER . "
-                          set testimonials_image = '" . $testimonials_image_name . "'
-                          where testimonials_id = '" . (int)$testimonials_id . "'");
-          } else {
-		 
-			if ($_POST['avatar_image'] != '') {
-              $existing_avatar = TESTIMONIAL_IMAGE_DIRECTORY . $_POST['avatar_image'];
-              $db->Execute("update " . TABLE_TESTIMONIALS_MANAGER . "
+  
+       if ($_POST['avatar_image'] != '') {
+        // add image manually
+        $existing_avatar = TESTIMONIAL_IMAGE_DIRECTORY . $_POST['avatar_image'];
+        $db->Execute("update " . TABLE_TESTIMONIALS_MANAGER . "
                             set testimonials_image = '" . $existing_avatar . "'
                             where testimonials_id = '" . (int)$testimonials_id . "'");
-            } else {
-            
-			if ($testimonials_image->filename != '' or $_POST['image_delete'] == 1) {
-			$defavatar = (TESTIMONIAL_IMAGE_DIRECTORY . 'noAvatar.png');
-              $db->Execute("update " . TABLE_TESTIMONIALS_MANAGER . "
-                            set testimonials_image = '" . $defavatar . "'
+      } else {
+        if ($testimonials_image = new upload('testimonials_image')) {
+          $testimonials_image->set_extensions(array('jpg','gif','png'));
+          $testimonials_image->set_destination(DIR_FS_CATALOG_IMAGES . TESTIMONIAL_IMAGE_DIRECTORY);
+          if ($testimonials_image->parse() && $testimonials_image->save()) {
+            $testimonials_image_name = zen_db_input(TESTIMONIAL_IMAGE_DIRECTORY . $testimonials_image->filename);
+          }
+          if ($testimonials_image->filename != 'none' && $testimonials_image->filename != '') {
+            // save filename when not set to none and not blank
+            $db->Execute("update " . TABLE_TESTIMONIALS_MANAGER . "
+                            set testimonials_image = '" . $testimonials_image_name . "'
+                          where testimonials_id = '" . (int)$testimonials_id . "'");
+          } 
+        }
+      }
+
+       if ($_POST['image_upimg'] != '') {
+        // add image manually
+        $existing_image = TM_UPLOAD_DIRECTORY . $_POST['image_upimg'];
+        $db->Execute("update " . TABLE_TESTIMONIALS_MANAGER . "
+                            set testimonials_upimg = '" . $existing_image . "'
                             where testimonials_id = '" . (int)$testimonials_id . "'");
-            }
-		}
-         
-		  }
-		}
- 
- 
- 
- 
+      } else {
+        if ($testimonials_upimg = new upload('testimonials_upimg')) {
+          $testimonials_upimg->set_extensions(array('jpg','png'));
+          $testimonials_upimg->set_destination(DIR_FS_CATALOG_IMAGES . TM_UPLOAD_DIRECTORY);
+          if ($testimonials_upimg->parse() && $testimonials_upimg->save()) {
+            $testimonials_upimg_name = zen_db_input(TM_UPLOAD_DIRECTORY . $testimonials_upimg->filename);
+          }
+          if ($testimonials_upimg->filename != 'none' && $testimonials_upimg->filename != '') {
+            // save filename when not set to none and not blank
+            $db->Execute("update " . TABLE_TESTIMONIALS_MANAGER . "
+                            set testimonials_upimg = '" . $testimonials_upimg_name . "'
+                          where testimonials_id = '" . (int)$testimonials_id . "'");
+          } 
+        }
+      }
+       
           zen_redirect(zen_href_link(FILENAME_TESTIMONIALS_MANAGER, (isset($_GET['page']) ? 'page=' . $_GET['page'] . '&' : '') . 'bID=' . $testimonials_id));
         } else {
           $action = 'new';
@@ -290,6 +301,7 @@ $new_version_details = plugin_version_check_for_updates($zencart_com_plugin_id, 
                         'helpful_yes' => '',
                         'helpful_no' => '',
                         'tm_gen_info' => '',
+                        'testimonials_upimg' => '',
 			'date_added' => '',
                         'status' =>'');
 
@@ -377,7 +389,7 @@ $new_version_details = plugin_version_check_for_updates($zencart_com_plugin_id, 
      if (($bInfo->testimonials_image) != ('')) {
    ?>
            <tr>
-            <td valign="top" class="main"><?php echo TEXT_INFO_CURRENT_IMAGE; ?></td>
+            <td valign="top" class="main"><?php echo TEXT_AVATAR_CURRENT_IMAGE; ?></td>
 			<td class="main"><?php echo $bInfo->testimonials_image; ?></td>
           </tr>
 <?php
@@ -385,19 +397,15 @@ $new_version_details = plugin_version_check_for_updates($zencart_com_plugin_id, 
 ?> 
 
            <tr>
-            <td valign="top" class="main"><?php echo TEXT_INFO_PAGE_IMAGE; ?></td>
+            <td valign="top" class="main"><?php echo TEXT_AVATAR_PAGE_IMAGE; ?></td>
 			<td class="main"><?php echo zen_draw_file_field('testimonials_image') . TEXT_TESTIMONIALS_OPTIONAL; ?></td>
           </tr>
 
 			<tr>
                 <td class="main"><?php echo zen_draw_separator('pixel_trans.gif', '24', '15'); ?></td>
-                <td colspan="3" class="main" valign="top"><?php echo TEXT_PRODUCTS_IMAGE_MANUAL . '&nbsp;' . zen_draw_input_field('avatar_image'); ?></td>
+                <td colspan="3" class="main" valign="top"><?php echo TEXT_AVATAR_IMAGE_MANUAL . '&nbsp;' . zen_draw_input_field('avatar_image'); ?></td>
               </tr>
-						  
-		  <tr>
-			<td class="main"><?php echo TEXT_IMAGES_TESTIMONIALS_DELETE; ?></td>
-            <td class="main"><?php echo zen_draw_radio_field('image_delete', '0', 'checked="checked"', $off_image_delete) . '&nbsp;' . TABLE_HEADING_NO . ' ' . zen_draw_radio_field('image_delete', '1', $on_image_delete) . '&nbsp;' . TABLE_HEADING_YES; ?></td>
-			</tr>
+
       <tr>
         <td><?php echo zen_draw_separator('pixel_trans.gif', '1', '10'); ?></td>
       </tr>
@@ -411,6 +419,30 @@ $new_version_details = plugin_version_check_for_updates($zencart_com_plugin_id, 
           <tr>
             <td colspan="2"><?php echo zen_draw_separator('pixel_trans.gif', '1', '10'); ?></td>
           </tr>
+              <?php
+     if (($bInfo->testimonials_upimg) != ('')) {
+   ?>
+           <tr>
+            <td valign="top" class="main"><?php echo TEXT_INFO_CURRENT_IMAGE; ?></td>
+			<td class="main"><?php echo $bInfo->testimonials_upimg; ?></td>
+          </tr>
+<?php
+}
+?> 
+
+           <tr>
+            <td valign="top" class="main"><?php echo TEXT_INFO_PAGE_IMAGE; ?></td>
+			<td class="main"><?php echo zen_draw_file_field('testimonials_upimg') . TEXT_TESTIMONIALS_OPTIONAL; ?></td>
+          </tr>
+
+			<tr>
+                <td class="main"><?php echo zen_draw_separator('pixel_trans.gif', '24', '15'); ?></td>
+                <td colspan="3" class="main" valign="top"><?php echo TEXT_PRODUCTS_IMAGE_MANUAL . '&nbsp;' . zen_draw_input_field('image_upimg'); ?></td>
+              </tr>
+
+      <tr>
+        <td><?php echo zen_draw_separator('pixel_trans.gif', '1', '10'); ?></td>
+      </tr>
         </table></td>
       </tr>
       <tr>
@@ -441,7 +473,7 @@ $new_version_details = plugin_version_check_for_updates($zencart_com_plugin_id, 
               </tr>
                 
 <?php
-    $testimonials_query_raw = "select testimonials_id, language_id, testimonials_image, testimonials_title, testimonials_name, testimonials_mail, testimonials_html_text, tm_rating, tm_feedback, tm_contact_user, tm_contact_phone, tm_privacy_conditions, tm_gen_info, helpful_yes, helpful_no, status, date_added, last_update, tm_make_public from " . TABLE_TESTIMONIALS_MANAGER . " order by date_added DESC, testimonials_title";
+    $testimonials_query_raw = "select testimonials_id, language_id, testimonials_image, testimonials_title, testimonials_name, testimonials_mail, testimonials_html_text, tm_rating, tm_feedback, tm_contact_user, tm_contact_phone, tm_privacy_conditions, tm_gen_info, testimonials_upimg, helpful_yes, helpful_no, status, date_added, last_update, tm_make_public from " . TABLE_TESTIMONIALS_MANAGER . " order by date_added DESC, testimonials_title";
     $testimonials_split = new splitPageResults($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS, $testimonials_query_raw, $testimonials_query_numrows);
     $testimonials = $db->Execute($testimonials_query_raw);
 
@@ -536,6 +568,7 @@ $teststatus = 'Approved';
         $contents[] = array('text' => '<br />' . 'Helpful yes voting' . ' '  . $bInfo->helpful_yes);
         $contents[] = array('text' => '<br />' . 'Helpful no voting' . ' '  . $bInfo->helpful_no);
         $contents[] = array('text' => '<br />' . TEXT_INFO_TESTIMONIALS_GEN_INFO . '<br />'  . $bInfo->tm_gen_info);
+        $contents[] = array('text' => '<br />' . 'Submited image:' . '<br />'  . $bInfo->testimonials_upimg);
         
         $contents[] = array('text' => '<br />' . TEXT_DATE_TESTIMONIALS_CREATED . ' ' . zen_date_short($bInfo->date_added));
 

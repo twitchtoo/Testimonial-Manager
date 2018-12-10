@@ -8,7 +8,7 @@
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
  * @version $Id: Author: DrByte  Sun Oct 18 23:02:01 2015 -0400 Modified in v1.5.5 $
- * @version $Id: Testimonials_Manager.php v2.0 11-30-2018 davewest $
+ * @version $Id: Testimonials_Manager.php v2.0 12-10-2018 davewest $
  */
 
 // This should be first line of the script:
@@ -16,7 +16,7 @@ $zco_notifier->notify('NOTIFY_HEADER_START_ADD_TESTIMONIALS');
  
 require(DIR_WS_MODULES . zen_get_module_directory('require_languages.php'));
 
-  require(DIR_WS_CLASSES . 'upload.php');
+
 
 if (REGISTERED_TESTIMONIAL == 'true'){
   if (!$_SESSION['customer_id']) {
@@ -55,7 +55,34 @@ $base_image = substr($testimonials_avatar, strrpos($testimonials_avatar, '/')); 
 $testimonials_avatar = TESTIMONIAL_IMAGE_DIRECTORY . $base_image; //reformat with image base folder and name
 
 
-
+            // Upload when form field is filled in by user 
+            
+         $noImage = true;
+        if (DISPLAY_ADD_IMAGE == 'on') {  //on off turns on/off uploads
+           if (strpos($_POST['tm_img'], 'data:image') === 0) {
+                $img = $_POST['tm_img'];
+   
+                if (strpos($img, 'data:image/jpeg;base64,') === 0) {
+                $img = str_replace('data:image/jpeg;base64,', '', $img);  
+                $ext = '.jpg';
+                }
+                if (strpos($img, 'data:image/png;base64,') === 0) {
+                $img = str_replace('data:image/png;base64,', '', $img); 
+                $ext = '.png';
+                }
+   
+                $img = str_replace(' ', '+', $img);
+                $data = base64_decode($img);
+                $file = TM_UPLOAD_DIRECTORY . 'img'.date("YmdHis").$ext;
+     if (file_put_contents(DIR_WS_IMAGES . $file, $data)) {
+      $messageStack->add('new_testimonial', 'The image was saved');
+  } else {
+      $messageStack->add('new_testimonial', 'The image could not be saved' , 'error');
+  } 
+             
+            } 
+        }
+   
                 
         $gen_info = 
 "Find what you wanted:" . ". . . " . $testimonials_wanted . "<br />" . 
@@ -155,6 +182,7 @@ if ($contact_user == 'phone') {
                                 array('fieldName'=>'testimonials_name', 'value'=>$testimonials_name, 'type'=>'stringIgnoreNull'),
                                 array('fieldName'=>'testimonials_html_text', 'value'=>$testimonials_html_text, 'type'=>'stringIgnoreNull'),
                                 array('fieldName'=>'testimonials_image', 'value'=>$testimonials_avatar, 'type'=>'stringIgnoreNull'),
+                                array('fieldName'=>'testimonials_upimg', 'value'=>$file, 'type'=>'stringIgnoreNull'),
                                 array('fieldName'=>'testimonials_mail', 'value'=>$testimonials_mail, 'type'=>'stringIgnoreNull'),
                                 array('fieldName'=>'tm_rating', 'value'=>$rating, 'type'=>'integer'),
                                 array('fieldName'=>'tm_feedback', 'value'=>$feedback, 'type'=>'stringIgnoreNull'),
