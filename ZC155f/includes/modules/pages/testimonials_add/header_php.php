@@ -239,8 +239,8 @@ if ($contact_user == 'phone') {
   } // eof form submit
 
 if ($_SESSION['customer_id']) {
-  $sql = "SELECT customers_id, customers_firstname, customers_email_address, customers_telephone, FROM " . TABLE_CUSTOMERS . " WHERE c.customers_id = :customersID ";
-  
+  $sql = "SELECT customers_id, customers_firstname, customers_email_address, customers_telephone FROM " . TABLE_CUSTOMERS . " c  WHERE c.customers_id = :customersID ";
+
   $sql = $db->bindVars($sql, ':customersID', $_SESSION['customer_id'], 'integer');
   $check_customer = $db->Execute($sql);
   
